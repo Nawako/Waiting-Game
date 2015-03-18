@@ -21,6 +21,8 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import java.util.Random;
+
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -87,10 +89,11 @@ public class FullscreenActivity extends Activity {
 
         // Circle
 
-        Paint paint = new Paint();
-        paint.setColor(Color.GREEN);
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        p = new Paint();
+        p.setColor(Color.GREEN);
+        p.setStyle(Paint.Style.FILL_AND_STROKE);
 
+        startGame();
 
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
@@ -146,6 +149,7 @@ public class FullscreenActivity extends Activity {
             }
         });
 
+
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
@@ -162,20 +166,25 @@ public class FullscreenActivity extends Activity {
         delayedHide(100);
     }
 
-    public void startGame(View view) {
+    public void startGame() {
         if (chrono.isEnabled()) {
             return;
         }
-        startChronometer(view);
-        x = 60;
-        y = 80;
-        radius = 60;
-        canvas.drawCircle(x, y, radius, p);
 
-        x = 500;
-        y = 200;
-        radius = 60;
-        canvas.drawCircle(x, y, radius, p);
+        for (int i=0; i<10; i++) {
+            int plageX = 1080;
+            int plageY = getWindowManager()
+                    .getDefaultDisplay().getHeight();
+
+            Random r = new Random();
+            int i1 = r.nextInt(plageX);
+            int i2 = r.nextInt(plageX);
+
+            x = i1;
+            y = i2;
+            radius = 60;
+            canvas.drawCircle(x, y, radius, p);
+        }
 
     }
 
