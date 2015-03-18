@@ -1,5 +1,6 @@
 package com.kilomobi.thewaitinggame;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -17,14 +18,17 @@ class ObjectDrawable extends Drawable {
 
     @Override
     public void draw(Canvas canvas) {
-        int lvl = getLevel();
-        Rect b = getBounds();
-        float x = b.width() * lvl / 10000.0f;
-        float y = (b.height() - mPaint.getStrokeWidth()) / 2;
-        mPaint.setColor(0xffff0000);
-        canvas.drawLine(0, y, x, y, mPaint);
-        mPaint.setColor(0xff00ff00);
-        canvas.drawLine(x, y, b.width(), y, mPaint);
+    //    int x = getWidth();
+    //    int y = getHeight();
+        int radius;
+        radius = 100;
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.WHITE);
+        canvas.drawPaint(paint);
+        // Use Color.parseColor to define HTML colors
+        paint.setColor(Color.parseColor("#CD5C5C"));
+    //    canvas.drawCircle(x / 2, y / 2, radius, paint);
     }
 
     @Override

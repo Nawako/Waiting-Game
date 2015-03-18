@@ -4,13 +4,22 @@ import com.kilomobi.thewaitinggame.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AbsoluteLayout;
 import android.widget.Chronometer;
+import android.widget.FrameLayout;
+import android.widget.Gallery;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 
 /**
@@ -49,7 +58,13 @@ public class FullscreenActivity extends Activity {
     private SystemUiHider mSystemUiHider;
     private long lastPause;
     private Chronometer chrono;
-    private CanvasView canvas;
+    private Canvas canvas;
+    private float x;
+    private float y;
+    private float radius;
+    private Paint p;
+    private CustomDrawableView mCustomDrawableView;
+    private FrameLayout ll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +75,22 @@ public class FullscreenActivity extends Activity {
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content);
         chrono = (Chronometer) findViewById(R.id.chronometer);
+        ll = (FrameLayout) findViewById(R.id.ll);
         lastPause = 0;
 
-        canvas = (CanvasView)this.findViewById(R.id.canvas);
+        ImageView drawingImageView = (ImageView) this.findViewById(R.id.DrawingImageView);
+        Bitmap bitmap = Bitmap.createBitmap((int) getWindowManager()
+                .getDefaultDisplay().getWidth(), (int) getWindowManager()
+                .getDefaultDisplay().getHeight(), Bitmap.Config.ARGB_8888);
+        canvas = new Canvas(bitmap);
+        drawingImageView.setImageBitmap(bitmap);
+
+        // Circle
+
+        Paint paint = new Paint();
+        paint.setColor(Color.GREEN);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+
 
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
@@ -121,7 +149,7 @@ public class FullscreenActivity extends Activity {
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+     //   findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
     }
 
     @Override
@@ -139,6 +167,15 @@ public class FullscreenActivity extends Activity {
             return;
         }
         startChronometer(view);
+        x = 60;
+        y = 80;
+        radius = 60;
+        canvas.drawCircle(x, y, radius, p);
+
+        x = 500;
+        y = 200;
+        radius = 60;
+        canvas.drawCircle(x, y, radius, p);
 
     }
 
@@ -150,9 +187,10 @@ public class FullscreenActivity extends Activity {
     public void stopChronometer(View view) {
         lastPause = chrono.getBase() - SystemClock.elapsedRealtime();
         chrono.stop();
-        this.canvas.setMode(CanvasView.Mode.DRAW);
-        this.canvas.setDrawer(CanvasView.Drawer.CIRCLE);
-
+   /*     Canvas circle = new Canvas();
+        CanvasView circleView = new CanvasView(this);
+        circleView.onDraw(circle);
+        ll.addView(circleView); */
     }
 
     public void resetChronometer(View view) {
