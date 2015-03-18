@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">The Waiting Game</string>
+    <string name="dummy_button">Clique moi !</string>
+    <string name="dummy_content">WAITING\nGame</string>
+</resources>
