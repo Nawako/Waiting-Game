@@ -47,6 +47,8 @@ public class FullscreenActivity extends Activity {
      * The instance of the {@link SystemUiHider} for this activity.
      */
     private SystemUiHider mSystemUiHider;
+    private long lastPause;
+    private Chronometer chrono;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,8 @@ public class FullscreenActivity extends Activity {
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content);
+        chrono = (Chronometer) findViewById(R.id.chronometer);
+        lastPause = 0;
 
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
@@ -127,16 +131,28 @@ public class FullscreenActivity extends Activity {
         delayedHide(100);
     }
 
+    public void startGame(View view) {
+        if (chrono.isEnabled()) {
+            return;
+        }
+        startChronometer(view);
+
+    }
+
     public void startChronometer(View view) {
-        ((Chronometer) findViewById(R.id.chronometer)).start();
+        chrono.setBase(SystemClock.elapsedRealtime() + lastPause);
+        chrono.start();
     }
 
     public void stopChronometer(View view) {
-        ((Chronometer) findViewById(R.id.chronometer)).stop();
+        lastPause = chrono.getBase() - SystemClock.elapsedRealtime();
+        chrono.stop();
     }
 
     public void resetChronometer(View view) {
-        ((Chronometer) findViewById(R.id.chronometer)).setBase(SystemClock.elapsedRealtime());
+        chrono.stop();
+        chrono.setBase(SystemClock.elapsedRealtime());
+        lastPause = 0;
     }
 
     /**
