@@ -49,6 +49,7 @@ public class FullscreenActivity extends Activity {
     private SystemUiHider mSystemUiHider;
     private long lastPause;
     private Chronometer chrono;
+    private CanvasView canvas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,8 @@ public class FullscreenActivity extends Activity {
         final View contentView = findViewById(R.id.fullscreen_content);
         chrono = (Chronometer) findViewById(R.id.chronometer);
         lastPause = 0;
+
+        canvas = (CanvasView)this.findViewById(R.id.canvas);
 
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
@@ -147,6 +150,9 @@ public class FullscreenActivity extends Activity {
     public void stopChronometer(View view) {
         lastPause = chrono.getBase() - SystemClock.elapsedRealtime();
         chrono.stop();
+        this.canvas.setMode(CanvasView.Mode.DRAW);
+        this.canvas.setDrawer(CanvasView.Drawer.CIRCLE);
+
     }
 
     public void resetChronometer(View view) {

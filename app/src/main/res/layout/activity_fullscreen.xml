@@ -52,6 +52,12 @@
             android:text="Reset"
             android:onClick="resetChronometer"/>
 
+        <com.kilomobi.thewaitinggame.CanvasView
+            android:id="@+id/canvas"
+            android:layout_width="280dp"
+            android:layout_height="280dp"
+            android:layout_gravity="center_horizontal" />
+
     </LinearLayout>
 
     <!-- This FrameLayout insets its children based on system windows using
