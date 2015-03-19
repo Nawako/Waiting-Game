@@ -20,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.Random;
 
@@ -67,6 +68,8 @@ public class FullscreenActivity extends Activity {
     private Paint p;
     private CustomDrawableView mCustomDrawableView;
     private FrameLayout ll;
+    private ImageView iv1, iv2;
+    private ImageView[] IMGS = { iv1, iv2 };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,20 +83,13 @@ public class FullscreenActivity extends Activity {
         ll = (FrameLayout) findViewById(R.id.ll);
         lastPause = 0;
 
-        ImageView drawingImageView = (ImageView) this.findViewById(R.id.DrawingImageView);
-        Bitmap bitmap = Bitmap.createBitmap((int) getWindowManager()
-                .getDefaultDisplay().getWidth(), (int) getWindowManager()
-                .getDefaultDisplay().getHeight(), Bitmap.Config.ARGB_8888);
-        canvas = new Canvas(bitmap);
-        drawingImageView.setImageBitmap(bitmap);
+        iv1 = (ImageView) findViewById(R.id.DrawingImageViewBanana);
+        iv2 = (ImageView) findViewById(R.id.DrawingImageViewBomb);
 
-        // Circle
+        IMGS[0] = iv1;
+        IMGS[1] = iv2;
 
-        p = new Paint();
-        p.setColor(Color.GREEN);
-        p.setStyle(Paint.Style.FILL_AND_STROKE);
-
-        startGame();
+        setImages();
 
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
@@ -171,6 +167,54 @@ public class FullscreenActivity extends Activity {
             return;
         }
 
+
+
+    }
+
+    public void startChronometer(View view) {
+        chrono.setBase(SystemClock.elapsedRealtime() + lastPause);
+        chrono.start();
+    }
+
+    private void setImages() {
+
+        // A) this works
+        iv1.setImageResource(R.drawable.banana);
+        iv1.setMaxHeight(100);
+        iv1.setMaxWidth(100);
+        iv2.setImageResource(R.drawable.bomb);
+        ImageView drawingImageViewCircle = (ImageView) this.findViewById(R.id.DrawingImageViewCircle);
+
+        // B) at the beginning i need to set all images in a row
+        for (ImageView img : IMGS) {
+            img.setImageResource(R.drawable.flame);
+        }
+
+        // C) later on i need to set an particular image
+        IMGS[1].setImageResource(R.drawable.bomb);
+    }
+
+    public void stopChronometer(View view) {
+        lastPause = chrono.getBase() - SystemClock.elapsedRealtime();
+        chrono.stop();
+   /*     Canvas circle = new Canvas();
+        CanvasView circleView = new CanvasView(this);
+        circleView.onDraw(circle);
+        ll.addView(circleView); */
+
+        ImageView drawingImageViewCircle = (ImageView) this.findViewById(R.id.DrawingImageViewCircle);
+        Bitmap bitmap = Bitmap.createBitmap((int) getWindowManager()
+                .getDefaultDisplay().getWidth(), (int) getWindowManager()
+                .getDefaultDisplay().getHeight(), Bitmap.Config.ARGB_8888);
+        canvas = new Canvas(bitmap);
+        drawingImageViewCircle.setImageBitmap(bitmap);
+
+        // Circle
+
+        p = new Paint();
+        p.setColor(Color.GREEN);
+        p.setStyle(Paint.Style.FILL_AND_STROKE);
+
         for (int i=0; i<10; i++) {
             int plageX = 1080;
             int plageY = getWindowManager()
@@ -185,21 +229,11 @@ public class FullscreenActivity extends Activity {
             radius = 60;
             canvas.drawCircle(x, y, radius, p);
         }
-
     }
 
-    public void startChronometer(View view) {
-        chrono.setBase(SystemClock.elapsedRealtime() + lastPause);
-        chrono.start();
-    }
-
-    public void stopChronometer(View view) {
-        lastPause = chrono.getBase() - SystemClock.elapsedRealtime();
-        chrono.stop();
-   /*     Canvas circle = new Canvas();
-        CanvasView circleView = new CanvasView(this);
-        circleView.onDraw(circle);
-        ll.addView(circleView); */
+    public void canvasClick(View view) {
+        Toast.makeText(getApplicationContext(),"canvasclick",Toast.LENGTH_LONG).show();
+        view.setVisibility(View.GONE);
     }
 
     public void resetChronometer(View view) {
